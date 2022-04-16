@@ -1,0 +1,15 @@
+.todo-list li > .loading {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.75);
+    box-sizing: border-box;
+    cursor: not-allowed;
+    display: flex;
+    font-size: 1rem;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
