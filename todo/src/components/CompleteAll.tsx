@@ -1,9 +1,12 @@
 import React, {FunctionComponent} from 'react';
 import {useDispatch, useAppState} from "context/TodoContext";
 import {active, completed} from "store/selectors";
-import {createChanging, createToggleCompleted} from "store/actions";
-import avoid from "utils/avoid";
-import {DELAY} from "const";
+import {
+  createChangeFailed,
+  createChanging,
+  createToggleCompleted
+} from "store/actions";
+import Api from "Api";
 
 const CompleteAll: FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -13,11 +16,16 @@ const CompleteAll: FunctionComponent = () => {
   
   const handleCompleteAllClick = () => {
     const items = active(state);
-
     items.forEach(({ id }) => dispatch(createChanging(id)));
 
-    const time = DELAY * items.length;
-    avoid(time).then(() => items.forEach(({ id }) => dispatch(createToggleCompleted(id))));
+    Promise
+      .allSettled(items.map(({ id, text }) => Api.put(`/todos/${id}`,{text, completed: true})))
+      .then(results => results.map((promise, i) => {
+        const {id, text} = items[i];
+  
+        if (promise.status === 'fulfilled') dispatch(createToggleCompleted(id));
+        else dispatch(createChangeFailed(id, text, false));
+      }));
   };
   
   if (todosCount === 0) return null;

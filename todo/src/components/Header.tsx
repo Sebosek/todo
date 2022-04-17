@@ -3,8 +3,8 @@ import TodoTextInput from "components/TodoTextInput";
 import {useDispatch} from "context/TodoContext";
 import {createAdd, createAddFailed, createAdding} from "store/actions";
 import {nanoid} from "nanoid";
-import avoid from "utils/avoid";
-import {DELAY} from "const";
+import Api from "Api";
+import {Todo} from "types/Todo";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -20,8 +20,12 @@ const Header = () => {
           const tid = nanoid();
           dispatch(createAdding(tid, text));
           
-          avoid(DELAY)
-            .then(() => dispatch(createAdd(tid, nanoid())))
+          Api.post<Todo>('/todos',{text})
+            .then(resp => {
+              const {id} = resp.data;
+              if (resp.status === 201) dispatch(createAdd(tid, id));
+              else throw new Error();
+            })
             .catch(() => dispatch(createAddFailed(tid)));
         }}
         placeholder="What needs to be done?"

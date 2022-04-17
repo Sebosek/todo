@@ -4,16 +4,15 @@ import TodoTextInput from 'components/TodoTextInput';
 import {Todo} from 'types/Todo';
 import {useDispatch} from "context/TodoContext";
 import {
-  createChanged, 
+  createChanged,
   createChangeFailed,
   createChanging,
-  createDeleted, 
+  createDeleted,
   createDeleteFailed,
   createDeleting,
   createToggleCompleted
 } from "store/actions";
-import avoid from "utils/avoid";
-import {DELAY} from "const";
+import Api from "Api";
 
 interface TodoItemProps {
   todo: Todo;
@@ -25,26 +24,32 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({ todo }) => {
   
   const deleteTodo = (id: string) => {
     dispatch(createDeleting(id));
-    
-    avoid(DELAY)
-      .then(() => dispatch(createDeleted(id)))
+
+    Api.delete(`/todos/${id}`)
+      .then(resp => {
+        if (resp.status === 204) dispatch(createDeleted(id));
+        else throw new Error();
+      })
       .catch(() => dispatch(createDeleteFailed(id)));
   };
   const editTodo = (id: string, text: string) => {
     const backup = {...todo};
     dispatch(createChanging(id));
 
-    avoid(DELAY)
-      .then(() => dispatch(createChanged(id, text)))
+    Api.put(`/todos/${id}`, {text})
+      .then(resp => {
+        if (resp.status === 204) dispatch(createChanged(id, text)); 
+        else throw new Error();
+      })
       .catch(() => dispatch(createChangeFailed(id, backup.text, !!backup.completed)));
   };
   const toggleCompleteTodo = (id: string) => {
-    const backup = {...todo};
+    const {text, completed} = {...todo};
     dispatch(createChanging(id));
 
-    avoid(DELAY)
+    Api.put(`/todos/${id}`, {text, completed: !completed})
       .then(() => dispatch(createToggleCompleted(id)))
-      .catch(() => dispatch(createChangeFailed(id, backup.text, !!backup.completed)));
+      .catch(() => dispatch(createChangeFailed(id, text, !!completed)));
   };
   
   const handleDoubleClick = () => {

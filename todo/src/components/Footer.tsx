@@ -4,8 +4,7 @@ import {Filter} from "types/Filter";
 import {useDispatch, useAppState} from "context/TodoContext";
 import {active, completed} from "store/selectors";
 import {createDeleted, createDeleteFailed, createDeleting} from "store/actions";
-import avoid from "utils/avoid";
-import {DELAY} from "const";
+import Api from "Api";
 
 const FILTER_TITLES = [Filter.All, Filter.Active, Filter.Completed];
 
@@ -21,10 +20,14 @@ const Footer: FunctionComponent = () => {
     const items = completed(state);
     items.forEach(({ id }) => dispatch(createDeleting(id)));
     
-    const time = DELAY * items.length;
-    avoid(time)
-      .then(() => items.forEach(({ id }) => dispatch(createDeleted(id))))
-      .catch(() => items.forEach(({ id }) => dispatch(createDeleteFailed(id))));
+    Promise
+      .allSettled(items.map(({ id }) => Api.delete(`/todos/${id}`)))
+      .then(results => results.map((promise, i) => {
+        const {id} = items[i];
+        
+        if (promise.status === 'fulfilled') dispatch(createDeleted(id));
+        else dispatch(createDeleteFailed(id));
+      }));
   };
   
   return (
