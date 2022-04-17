@@ -1,11 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using TodoService;
 
+const string CORS_POLICY = "localhost";
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TodoDbContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy(CORS_POLICY, policy =>
+    {
+        policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -14,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(CORS_POLICY);
 app.UseHttpsRedirection();
 app.MapGet("/", () => "Hello world!").WithName("Get");
 app.MapGet("/todos", async (TodoDbContext db) => await db.Todos.ToListAsync());
