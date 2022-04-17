@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(CORS_POLICY);
 app.UseHttpsRedirection();
 app.MapGet("/todos", async (TodoDbContext db) => await db.Todos.ToListAsync());
-app.MapGet("/todos/completes", async (TodoDbContext db) => await db.Todos.Where(t => t.Completed).ToListAsync());
+app.MapGet("/todos/completed", async (TodoDbContext db) => await db.Todos.Where(t => t.Completed).ToListAsync());
 app.MapGet("/todos/{id}", async (Guid id, TodoDbContext db) =>
     await db.Todos.FindAsync(id)
         is Todo todo
@@ -38,7 +38,7 @@ app.MapPost("/todos", async (TodoModel todo, TodoDbContext db) =>
     db.Todos.Add(entity);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/todos/{entity.Id}", todo);
+    return Results.Created($"/todos/{entity.Id}", entity);
 });
 app.MapPut("/todos/{id}", async (Guid id, TodoModel inputTodo, TodoDbContext db) =>
 {
@@ -51,13 +51,13 @@ app.MapPut("/todos/{id}", async (Guid id, TodoModel inputTodo, TodoDbContext db)
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
-app.MapDelete("/todos/{id}", async (int id, TodoDbContext db) =>
+app.MapDelete("/todos/{id}", async (Guid id, TodoDbContext db) =>
 {
     if (await db.Todos.FindAsync(id) is not Todo todo) return Results.NotFound();
     
     db.Todos.Remove(todo);
     await db.SaveChangesAsync();
-    return Results.Ok(todo);
+    return Results.NoContent();
 });
 
 app.Run();
