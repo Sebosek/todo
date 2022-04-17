@@ -1,10 +1,10 @@
 import React from 'react';
-import TodoTextInput from "./TodoTextInput";
-import {useDispatch} from "../context/TodoContext";
-import {createAdd, createAddFailed, createAdding} from "../context/TodoContext.actions";
+import TodoTextInput from "components/TodoTextInput";
+import {useDispatch} from "context/TodoContext";
+import {createAdd, createAddFailed, createAdding} from "store/actions";
 import {nanoid} from "nanoid";
-import avoid from "../utils/avoid";
-import {DELAY} from "../const";
+import avoid from "utils/avoid";
+import {DELAY} from "const";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const Header = () => {
           
           const tid = nanoid();
           dispatch(createAdding(tid, text));
+          
           avoid(DELAY)
             .then(() => dispatch(createAdd(tid, nanoid())))
             .catch(() => dispatch(createAddFailed(tid)));

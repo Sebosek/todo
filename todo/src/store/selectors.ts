@@ -1,6 +1,6 @@
-import {TodoState} from "./TodoContext.reducer";
-import {Filter} from "../types/Filter";
-import {Todo} from "../types/Todo";
+import {TodoState} from "store/reducer";
+import {Filter} from "types/Filter";
+import {Todo} from "types/Todo";
 
 export const all = ({ todos }: TodoState) => todos.filter(todo => !todo.deleted);
 export const active = ({ todos }: TodoState) => todos.filter(todo => !todo.deleted && !todo.completed);

@@ -1,13 +1,13 @@
 import React, {FunctionComponent} from 'react';
-import {useDispatch, useState} from "../context/TodoContext";
-import {active, completed} from "../context/TodoContext.selectors";
-import {createChanging, createToggleCompleted} from "../context/TodoContext.actions";
-import avoid from "../utils/avoid";
-import {DELAY} from "../const";
+import {useDispatch, useAppState} from "context/TodoContext";
+import {active, completed} from "store/selectors";
+import {createChanging, createToggleCompleted} from "store/actions";
+import avoid from "utils/avoid";
+import {DELAY} from "const";
 
 const CompleteAll: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const state = useState();
+  const state = useAppState();
   const todosCount = state.todos.length;
   const completedCount = completed(state).length;
   

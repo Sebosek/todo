@@ -1,13 +1,37 @@
-import React from 'react';
-import TodoItem from './TodoItem';
-import {useState} from "../context/TodoContext";
-import {filtered} from "../context/TodoContext.selectors";
+import React, {useEffect, useState} from 'react';
+import TodoItem from 'components/TodoItem';
+import {useDispatch, useAppState} from "context/TodoContext";
+import {filtered} from "store/selectors";
+import Api from "Api";
+import {Todo} from "types/Todo";
+import {toast} from "react-toastify";
+import {createLoaded} from "store/actions";
+import LoadingTodos from "components/LoadingTodos";
 
 const TodoList = () => {
-  const state = useState();
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const state = useAppState();
+  
+  useEffect(() => {
+    Api.get<Array<Todo>>("/todos").then(resp => {
+      if (resp.status !== 200) {
+        toast.error("Unable to load todos", {toastId: 'loaded', autoClose: false});
+        setLoading(false);
+        return;
+      }
+      
+      const todos = resp.data;
+      dispatch(createLoaded(todos));
+      setLoading(false);
+    })
+  }, []);
   
   return (
     <ul className="todo-list">
+      {loading && (
+        <LoadingTodos />
+      )}
       {filtered(state).map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}

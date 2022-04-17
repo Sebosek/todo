@@ -1,18 +1,19 @@
 import React, {FunctionComponent, useState} from 'react';
 import cx from 'classnames';
-import TodoTextInput from './TodoTextInput';
-import {Todo} from '../types/Todo';
-import {useDispatch} from "../context/TodoContext";
+import TodoTextInput from 'components/TodoTextInput';
+import {Todo} from 'types/Todo';
+import {useDispatch} from "context/TodoContext";
 import {
-  Actions,
-  createChanged, createChangeFailed,
+  createChanged, 
+  createChangeFailed,
   createChanging,
-  createDeleted, createDeleteFailed,
+  createDeleted, 
+  createDeleteFailed,
   createDeleting,
   createToggleCompleted
-} from "../context/TodoContext.actions";
-import avoid from "../utils/avoid";
-import {DELAY} from "../const";
+} from "store/actions";
+import avoid from "utils/avoid";
+import {DELAY} from "const";
 
 interface TodoItemProps {
   todo: Todo;

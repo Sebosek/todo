@@ -1,7 +1,7 @@
 import React, {createContext, Dispatch, FunctionComponent, useContext, useReducer} from "react";
-import {reducer, TodoState} from "./TodoContext.reducer";
-import {TodoActions} from "./TodoContext.actions";
-import {Filter} from "../types/Filter";
+import {reducer, TodoState} from "store/reducer";
+import {TodoActions} from "store/actions";
+import {Filter} from "types/Filter";
 
 const TodoContext = createContext<{ state: TodoState, dispatch: Dispatch<TodoActions> } | undefined>(undefined);
 
@@ -22,10 +22,10 @@ export const TodoProvider: FunctionComponent = ({ children }) => {
   );
 };
 
-export const useState = (): TodoState => {
+export const useAppState = (): TodoState => {
   const ctx = useContext(TodoContext);
   if (ctx === undefined) {
-    throw new Error("useState must be called inside the 'TodoProvider'");
+    throw new Error("useAppState must be called inside the 'TodoProvider'");
   }
 
   return ctx.state;

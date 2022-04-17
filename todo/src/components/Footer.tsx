@@ -1,17 +1,17 @@
 import React, {FunctionComponent} from "react";
-import FilterLink from "../components/Link";
-import {Filter} from "../types/Filter";
-import {useDispatch, useState} from "../context/TodoContext";
-import {active, completed} from "../context/TodoContext.selectors";
-import {createDeleted, createDeleteFailed, createDeleting} from "../context/TodoContext.actions";
-import avoid from "../utils/avoid";
-import {DELAY} from "../const";
+import FilterLink from "components/Link";
+import {Filter} from "types/Filter";
+import {useDispatch, useAppState} from "context/TodoContext";
+import {active, completed} from "store/selectors";
+import {createDeleted, createDeleteFailed, createDeleting} from "store/actions";
+import avoid from "utils/avoid";
+import {DELAY} from "const";
 
 const FILTER_TITLES = [Filter.All, Filter.Active, Filter.Completed];
 
 const Footer: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const state = useState();
+  const state = useAppState();
   const activeCount = active(state).length;
   const completedCount = completed(state).length;
   

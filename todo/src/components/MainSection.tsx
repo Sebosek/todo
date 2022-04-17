@@ -1,7 +1,7 @@
 import React from 'react';
-import TodoList from '../components/TodoList';
-import Footer from "./Footer";
-import CompleteAll from "./CompleteAll";
+import TodoList from 'components/TodoList';
+import Footer from "components/Footer";
+import CompleteAll from "components/CompleteAll";
 
 const MainSection = () => {
   

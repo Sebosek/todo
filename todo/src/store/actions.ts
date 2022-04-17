@@ -1,6 +1,8 @@
-import {Filter} from "../types/Filter";
+import {Filter} from "types/Filter";
+import {Todo} from "types/Todo";
 
 export enum Actions {
+  TodoLoaded = 'Todo items are loaded',
   TodoAdding = 'Todo item is being add',
   TodoAdd = 'Todo item has been add',
   TodoAddFailed = 'Unable to add todo',
@@ -14,6 +16,7 @@ export enum Actions {
   SetFilter = 'Set current filter',
 }
 
+export type TodoLoaded = { type: Actions.TodoLoaded, todos: Array<Todo> };
 export type TodoAdding = { type: Actions.TodoAdding, tid: string, text: string };
 export type TodoAdd = { type: Actions.TodoAdd, tid: string, id: string };
 export type TodoAddFailed = { type: Actions.TodoAddFailed, tid: string };
@@ -26,6 +29,7 @@ export type TodoDeleted = { type: Actions.TodoDeleted, id: string };
 export type TodoDeleteFailed = { type: Actions.TodoDeleteFailed, id: string };
 export type SetFilter = { type: Actions.SetFilter, filter: Filter };
 
+export const createLoaded = (todos: Array<Todo>):TodoLoaded => ({ type: Actions.TodoLoaded, todos });
 export const createAdding = (tid: string, text: string):TodoAdding => ({ type: Actions.TodoAdding, tid, text });
 export const createAdd = (tid: string, id: string):TodoAdd => ({ type: Actions.TodoAdd, tid, id });
 export const createAddFailed = (tid: string):TodoAddFailed => ({ type: Actions.TodoAddFailed, tid });
@@ -39,7 +43,8 @@ export const createDeleteFailed = (id: string):TodoDeleteFailed => ({ type: Acti
 export const createSetFilter = (filter: Filter):SetFilter => ({ type: Actions.SetFilter, filter });
 
 export type TodoActions
-  = TodoAdding
+  = TodoLoaded
+  | TodoAdding
   | TodoAdd
   | TodoAddFailed
   | TodoChanging

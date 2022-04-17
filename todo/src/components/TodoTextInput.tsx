@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, KeyboardEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, FunctionComponent, KeyboardEvent, useState} from 'react';
 import cx from 'classnames';
 
 interface TodoTextInputProps {

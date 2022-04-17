@@ -1,8 +1,8 @@
 import React, {FunctionComponent} from "react";
 import classnames from "classnames";
-import {Filter} from "../types/Filter";
-import {useDispatch, useState} from "../context/TodoContext";
-import {createSetFilter} from "../context/TodoContext.actions";
+import {Filter} from "types/Filter";
+import {useDispatch, useAppState} from "context/TodoContext";
+import {createSetFilter} from "store/actions";
 
 interface LinkProps {
   filter: Filter;
@@ -10,7 +10,7 @@ interface LinkProps {
 
 const Link: FunctionComponent<LinkProps> = ({ children, filter }) => {
   const dispatch = useDispatch();
-  const {filter: current} = useState();
+  const {filter: current} = useAppState();
 
   return (
     <a

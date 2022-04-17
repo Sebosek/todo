@@ -1,6 +1,6 @@
-import {Todo} from '../types/Todo';
-import {Actions, TodoActions} from './TodoContext.actions';
-import {Filter} from "../types/Filter";
+import {Todo} from 'types/Todo';
+import {Actions, TodoActions} from 'store/actions';
+import {Filter} from "types/Filter";
 import {toast} from "react-toastify";
 
 export interface TodoState {
@@ -10,6 +10,10 @@ export interface TodoState {
 
 export const reducer = (state: TodoState, action: TodoActions) => {
   switch (action.type) {
+    case Actions.TodoLoaded: {
+      const { todos } = action;
+      return { ...state, todos };
+    }
     case Actions.TodoAdding: {
       const { todos } = state;
       const { text, tid } = action;
