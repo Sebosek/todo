@@ -14,6 +14,8 @@ const Link: FunctionComponent<LinkProps> = ({ children, filter }) => {
 
   return (
     <a
+      data-ui-test="todo-filter" 
+      data-ui-test-filter={filter}
       className={classnames({ selected: current === filter })}
       style={{ cursor: "pointer" }}
       onClick={() => dispatch(createSetFilter(filter))}

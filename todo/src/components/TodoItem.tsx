@@ -68,6 +68,8 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({ todo }) => {
   
   return (
     <li
+      data-ui-test="todo-item"
+      data-ui-test-todo-id={todo.id}
       className={cx({
         completed: todo.completed,
         editing: editing,
@@ -83,17 +85,27 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({ todo }) => {
       {!editing && (
         <div className="view">
           <input
+            data-ui-test="todo-toggle"
             className="toggle"
             type="checkbox"
             checked={todo.completed}
             onChange={() => toggleCompleteTodo(todo.id)}
           />
-          <label onDoubleClick={handleDoubleClick}>{todo.text}</label>
-          <button className="destroy" onClick={() => deleteTodo(todo.id)} />
+          <label
+            data-ui-test="todo-label"
+            onDoubleClick={handleDoubleClick}
+          >
+            {todo.text}
+          </label>
+          <button
+            data-ui-test="todo-destroy"
+            className="destroy" 
+            onClick={() => deleteTodo(todo.id)}
+          />
         </div>
       )}
       {todo.processing && (
-        <div className="loading">Loading&hellip;</div>
+        <div data-ui-test="todo-loading" className="loading">Loading&hellip;</div>
       )}
     </li>
   );

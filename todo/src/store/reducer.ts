@@ -42,7 +42,7 @@ export const reducer = (state: TodoState, action: TodoActions) => {
     case Actions.TodoAddFailed: {
       const {tid} = action;
       
-      toast.error("Unable to create a todo", {toastId: tid});
+      toast.error("Unable to create a todo", {toastId: `todo-error__${tid}`});
       return {
         ...state,
         todos: state.todos.filter(i => i.id !== tid),
@@ -75,7 +75,7 @@ export const reducer = (state: TodoState, action: TodoActions) => {
     case Actions.TodoChangeFailed: {
       const {id, text, completed} = action;
 
-      toast.error("Unable to change todo", {toastId: id});
+      toast.error("Unable to change todo", {toastId: `todo-error__${id}`});
       return {
         ...state,
         todos: state.todos.filter(i => {
@@ -125,7 +125,7 @@ export const reducer = (state: TodoState, action: TodoActions) => {
     case Actions.TodoDeleteFailed: {
       const { id } = action;
 
-      toast.error("Unable to delete todo", {toastId: id});
+      toast.error("Unable to delete todo", {toastId: `todo-error__${id}`});
       return {
         ...state,
         todos: state.todos.map(i => {

@@ -40,19 +40,20 @@ const TodoTextInput: FunctionComponent<TodoTextInputProps> = ({onSave, text, pla
   };
   
   return (
-    <input 
+    <input
+      data-ui-test="todo-input"  
       className={
         cx({
           'edit': editing,
           'new-todo': newTodo
         })}
-        type="text"
-        placeholder={placeholder}
-        autoFocus={true}
-        value={value}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
+      type="text"
+      placeholder={placeholder}
+      autoFocus={true}
+      value={value}
+      onBlur={handleBlur}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
     />
   )
 };

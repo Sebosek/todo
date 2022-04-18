@@ -14,21 +14,25 @@ const TodoList = () => {
   const state = useAppState();
   
   useEffect(() => {
-    Api.get<Array<Todo>>("/todos").then(resp => {
-      if (resp.status !== 200) {
-        toast.error("Unable to load todos", {toastId: 'loaded', autoClose: false});
-        setLoading(false);
-        return;
-      }
-      
-      const todos = resp.data;
-      dispatch(createLoaded(todos));
-      setLoading(false);
-    })
+    Api
+      .get<Array<Todo>>("/todos")
+      .then(resp => {
+        if (resp.status !== 200) {
+          toast.error("Unable to load todos", {toastId: 'loaded-error', autoClose: false});
+          return;
+        }
+        
+        const todos = resp.data;
+        dispatch(createLoaded(todos));
+      })
+      .catch(() => {
+        toast.error("Unable to load todos", {toastId: 'loaded-error', autoClose: false});
+      })
+      .finally(() => setLoading(false));
   }, []);
   
   return (
-    <ul className="todo-list">
+    <ul data-ui-test="todo-list" className="todo-list">
       {loading && (
         <LoadingTodos />
       )}

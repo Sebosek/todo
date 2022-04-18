@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LoadingTodos = () => (
-  <li>
+  <li data-ui-test="todo-loading">
     <div className="view">
       <label>&nbsp;</label>
     </div>
