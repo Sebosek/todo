@@ -23,3 +23,27 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+import selectors from "../selectors";
+
+Cypress.Commands.add(
+  "toggleTodoCompleted",
+  { prevSubject: "optional" },
+  ($el, complete) => {
+    if (complete === undefined) {
+      throw new Error("Command required 'complete' parameter");
+    }
+
+    if ($el && complete) {
+      return cy.get($el).check();
+    }
+    if ($el && !complete) {
+      return cy.get($el).uncheck();
+    }
+    
+    if (complete) {
+      return cy.get(selectors.TODO_TOGGLE).check();
+    }
+    
+    return cy.get(selectors.TODO_TOGGLE).uncheck();
+  });

@@ -1,0 +1,17 @@
+﻿[
+  {
+    "id": "b7ccbcaf-d187-408c-95be-1ec3f00903a1",
+    "text": "Write a fairytale",
+    "completed": false
+  },
+  {
+    "id": "2b79e783-20f3-4854-8255-6ba9d1d3c339",
+    "text": "Learn React",
+    "completed": true
+  },
+  {
+    "id": "ddfdd229-f25c-4935-bd4c-ebed6786be8d",
+    "text": "Walk the dog",
+    "completed": false
+  }
+]
