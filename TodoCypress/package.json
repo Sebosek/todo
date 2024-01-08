@@ -9,6 +9,6 @@
   "author": "Sebastian Busek",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^9.5.4"
+    "cypress": "^13.6.2 "
   }
 }

@@ -6,19 +6,24 @@
 import {GENERIC_PATH, TARGET_PATH} from "./consts";
 import todos from '../fixtures/todos.json';
 
-Cypress.Commands.add('mockReadAllTodos', (options = {}) =>
-  cy
-    .intercept(
-      'GET', 
-      GENERIC_PATH, 
-      {
-        // unable to use fixture because the JSON file doesn't contains '{}' at root level
-        // fixture: 'todos'
-        body: todos,
-        statusCode: 200,
-        ...options,
-      })
-    .as('mockReadAllTodos'));
+Cypress.Commands.add('mockReadAllTodos', (options = {}) => {
+  let promise = Promise.resolve();
+  if (options && typeof options === 'object' && options.hasOwnProperty('avoid')) {
+    promise = new Promise(resolve => {
+      options['avoid'] = resolve;
+    });
+  }
+  
+  return cy.intercept('GET', GENERIC_PATH, async req => {
+    await promise;
+    
+    req.reply({
+      body: todos,
+      statusCode: 200,
+      ...options,
+    });
+  }).as('mockReadAllTodos');
+});
 
 Cypress.Commands.add('mockCreateTodo', (options = {}) =>
   cy

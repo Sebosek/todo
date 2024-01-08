@@ -1,10 +1,12 @@
 ﻿/// <reference types="cypress" />
 
 import selectors from "../selectors";
+import {GENERIC_PATH} from "../support/consts";
+import todos from "../fixtures/todos.json";
 
 describe('Application smoke tests', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000')
+    cy.visit('http://localhost:3000');
   });
 
   it('Present loading state while loading todos and show results', () => {
@@ -12,6 +14,40 @@ describe('Application smoke tests', () => {
       .mockReadAllTodos({ delay: 200 })
       .get(selectors.TODO_LOADING)
       .should('exist')
+      .wait('@mockReadAllTodos')
+      .get(selectors.TODO_ITEM)
+      .should('have.length', 3);
+  });
+
+  it.skip('Present more reliable loading state while loading todos and show results', () => {
+    let resolve = () => {};
+    let promise = new Promise(res => (resolve = res));
+
+    cy.intercept('GET', GENERIC_PATH, async req => {
+      await promise;
+
+      req.reply({
+        body: todos,
+        statusCode: 200,
+      });
+    }).as('readTodos');
+    
+    cy.get(selectors.TODO_LOADING).should('exist');
+
+    resolve();
+    cy.get(selectors.TODO_LOADING)
+      .should('not.exist')
+      .get(selectors.TODO_ITEM)
+      .should('have.length', 3);
+  });
+
+  const def = { avoid: undefined };
+  it.skip('Present more reliable loading state while loading todos and show results', () => {
+    cy
+      .mockReadAllTodos(def)
+      .get(selectors.TODO_LOADING)
+      .should('exist')
+      .then(() => def.avoid())
       .wait('@mockReadAllTodos')
       .get(selectors.TODO_ITEM)
       .should('have.length', 3);
