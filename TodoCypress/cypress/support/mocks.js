@@ -9,19 +9,28 @@ import todos from '../fixtures/todos.json';
 Cypress.Commands.add('mockReadAllTodos', (options = {}) => {
   let promise = Promise.resolve();
   if (options && typeof options === 'object' && options.hasOwnProperty('avoid')) {
-    promise = new Promise(resolve => {
+    promise = new Promise((resolve, reject) => {
       options['avoid'] = resolve;
+      options['error'] = reject;
     });
   }
   
   return cy.intercept('GET', GENERIC_PATH, async req => {
-    await promise;
+    try {
+      await promise;
     
-    req.reply({
-      body: todos,
-      statusCode: 200,
-      ...options,
-    });
+      req.reply({
+        body: todos,
+        statusCode: 200,
+        ...options,
+      });
+    } catch {
+      req.reply({
+        body: {},
+        statusCode: 500,
+        ...options,
+      });
+    }
   }).as('mockReadAllTodos');
 });
 

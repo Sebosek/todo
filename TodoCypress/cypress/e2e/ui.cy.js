@@ -9,7 +9,7 @@ describe('Application smoke tests', () => {
     cy.visit('http://localhost:3000');
   });
 
-  it('Present loading state while loading todos and show results', () => {
+  it.only('Present loading state while loading todos and show results', () => {
     cy
       .mockReadAllTodos({ delay: 200 })
       .get(selectors.TODO_LOADING)
@@ -41,13 +41,13 @@ describe('Application smoke tests', () => {
       .should('have.length', 3);
   });
 
-  const def = { avoid: undefined };
-  it.skip('Present more reliable loading state while loading todos and show results', () => {
+  const def = { avoid: undefined, error: undefined };
+  it.only('Present more reliable loading state while loading todos and show results', () => {
     cy
       .mockReadAllTodos(def)
       .get(selectors.TODO_LOADING)
       .should('exist')
-      .then(() => def.avoid())
+      .then(() => def.avoid()) // you can call def.error() to reject promise that would cause 500 Server error
       .wait('@mockReadAllTodos')
       .get(selectors.TODO_ITEM)
       .should('have.length', 3);
